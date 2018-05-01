@@ -1,0 +1,45 @@
+﻿
+<div class="col-md-6 col-md-offset-3 login-container">
+    <h2 class="page-header">@ViewBag.userMessage</h2>
+    <div id="loginContent">
+        <form action="@Request.RawUrl" method="POST" class="form-horizontal" role="form">
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                <label class="control-label col-md-2">Username</label>
+                <div class="col-md-4">
+                    <input type="text" id="username" />
+                    @Html.ValidationMessage("username", "*")
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2">Password</label>
+                <div class="col-md-4">
+                    <input type="text" id="password" />
+
+                    @Html.ValidationMessage("password", "*")
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-1 col-md-6">
+                    <div class="checkbox">
+                        <label><input id="rememberMe" type="checkbox" name="rememberMe"> Remember me</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-1 col-md-6">
+                    @Html.ActionLink("Submit", "Login", "Home", new { id = "myLink" })
+
+                </div>
+            </div>
+
+            <div class="col-md-offset-1 col-md-6">
+                <div id="successMessage">@Html.ValidationSummary()</div>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="~/Scripts/login.js"></script>

@@ -1,0 +1,61 @@
+﻿#logo {
+    background: url(../Content/Images/complianceLogo.png) no-repeat top left;
+    height: 34px;
+    display: block;
+    margin-top: -5px;
+    margin-bottom: -10px;
+}
+
+#header {
+    position: relative;
+    transform: translateY(25%);
+}
+
+body {
+    margin: 0; /*gets rid of white space around body*/
+    max-height: 100%;
+    /*background: url("https://static.pexels.com/photos/1440/city-road-street-buildings.jpg") no-repeat center / contain;
+    background-color: #eee;*/
+    position: relative; /*REQUIRED Sets up positioning for your footer*/
+    /*background-image: url('Images/redGradient.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;*/
+}
+
+.content {
+    padding-bottom: 60px;
+}
+
+.footer {
+    width: 100%;
+    padding: 20px;
+    padding-bottom: 16px;
+    color: black;
+    background-color: white;
+    font-weight: bold;
+    font-size: 18px;
+    text-align: center;
+    bottom: 0; /*to the bottom of the body*/
+    left: 0; /*and to the left of the body.*/
+    position: relative;
+    /*EFFECTS*/
+    /*border-top: 1px solid whitesmoke; /*border for accent*/
+    /*box-shadow: 0 -6px 32px; /*shadow*/
+}
+
+.navbar-fixed-left {
+    border-radius: 0;
+}
+
+    .navbar-fixed-left .navbar-nav > li {
+        float: none; /* Cancel default li float: left */
+    }
+
+        /* On using dropdown menu (To right shift popuped) */
+        .navbar-fixed-left .navbar-nav > li > .dropdown-menu {
+            margin-top: -50px;
+        }
+
+.sorting, .sorting_asc, .sorting_desc,.sorting_both, .sorting_asc_disabled, .sorting_desc_disabled {
+    background: none;
+}

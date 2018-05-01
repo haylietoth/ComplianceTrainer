@@ -1,0 +1,47 @@
+﻿@{
+    ViewBag.Title = "All Training";
+}
+@model ComplianceTrainer.Models.UserViewModel
+@Html.HiddenFor(m => m.isHR, new { id = "hrCheck" })
+@Html.HiddenFor(m => m.isManager, new { id = "managerCheck" })
+@Html.HiddenFor(m => m.userGroups, new { id = "memberOf" })
+<div class="row">
+    <div class="col-sm-10 col-sm-offset-1">
+        <div id="spinner" style="display:block" ;>
+            <h3 id="spinnerText"></h3>
+            <h4>If the page takes longer then 5 seconds to load click <a onClick="window.location.reload()">Here</a></h4>
+            <img src="~/Content/Images/loader32.gif" alt="loading" />
+        </div>
+    </div>
+</div>
+<div id="main-container">
+    <div>
+        <h2>Edit or Remove Exisiting Training</h2>
+        <p class="text-muted">Review already existing training below by clicking on the edit button to edit, or the remove button to remove.</p>
+    </div>
+    <div class="row">
+        <div class="col-sm-10 col-sm-offset-1">
+            <table id="trainingTable" class="display" cellspacing="0" style="width:100%;"></table>
+            <input type="submit" value="Add A New Training" id="AddTrainingButton"
+                    class="btn btn-primary" role="button" aria-disabled="false"
+                    onclick="location.href='@Url.Action("AddTraining", "Training")'" />
+        </div>
+    </div>
+    <div class="modal fade" id="confirmRemove" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    Confirm Remove
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to remove this quiz?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button id="removeQuizBtn" class="btn btn-success success">Remove</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/AllTraining.js"></script>

@@ -1,0 +1,268 @@
+﻿@model ComplianceTrainer.Models.UserQuizViewModel
+@Html.HiddenFor(m => m.isHR, new { id = "hrCheck" })
+@Html.HiddenFor(m => m.isManager, new { id = "managerCheck" })
+@Html.HiddenFor(m => m.QuizId, new { id = "quizId" })
+<link rel="stylesheet" type="text/css" href="~/Content/addTraining.css" />
+<link rel="stylesheet" type="text/css" href="~/Content/datepicker.css" />
+<h2>Add Quiz</h2>
+<div ng-app="updateQuizApp">
+    <div class="row">
+        <div class="col-md-8">
+            <div ng-controller="updateQuizController" ng-init="quizData">
+                <form id="quizForm" name="quizForm" ng-submit="updateQuiz">
+                    <fieldset ng-disabled="status.passedStartDate">
+                        <div class="form-group required">
+                            <label class="control-label" for="trainingTitle">Title</label>
+                            <input type="text" disabled="disabled" class="form-control quizFormInfo" id="trainingTitle" ng-model="quizData.title" placeholder="Enter Title" required>
+
+                        </div>
+                        <div class="form-group" ng-init="quizData.description=''">
+                            <label for="trainingDesc">Description</label>
+                            <input type="text" class="form-control quizFormInfo" id="trainingDesc" ng-model="quizData.description" placeholder="Enter Description">
+                        </div>
+                        <div class="form-group required">
+                            <label class="control-label" for="groupApplied">Group(s) Applied To</label>
+                            <select multiple class="form-control quizFormInfo" id="groupsApplied" ng-model="quizData.groups" ng-change="setGroups()" required>
+                                <option id="{{group.id}}" ng-repeat="group in groups" ng-value="{{group.id}}">{{group.name}}</option>
+                            </select>
+
+                        </div>
+                        <div class="form-group" ng-init="quizData.media=''">
+                            <label for="uploadMedia">Media Link</label>
+                            <input id="mediaFile" type="text" name="uploadFile" class="form-control quizFormInfo" ng-model="quizData.media" placeholder="Enter Media Link">
+                        </div>
+
+                        <!--Datepicker Container-->
+                        <div id="sandbox-container">
+                            <div class="form-group row required">
+                                <label class="col-sm-3 col-form-label control-label">Start Date</label>
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <input id="startDate" name="startDate" type="text" class="form-control quizFormInfo dateInfo" ng-model="quizData.startDate" required />
+                                        <label class="input-group-addon btn" for="startDate">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                        </label>
+                                    </div>
+                                    <span id="startWarning" style="color:red"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row required">
+                                <label class="col-sm-3 col-form-label control-label">Preferred Date</label>
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <input id="preferredDate" name="preferredDate" type="text" class="form-control quizFormInfo dateInfo" ng-model="quizData.preferredDate" ng-disabled="!quizData.startDate" required />
+                                        <label class="input-group-addon btn" for="preferredDate">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                        </label>
+                                    </div>
+                                    <span id="preferredWarning" style="color:red"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row required">
+                                <label class="col-sm-3 col-form-label control-label">Expiration Date</label>
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <input id="expirationDate" name="expirationDate" type="text" class="form-control quizFormInfo dateInfo" ng-model="quizData.expirationDate" ng-disabled="!quizData.startDate || !quizData.preferredDate" required />
+                                        <label class="input-group-addon btn" for="expirationDate">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                        </label>
+                                    </div>
+                                    <span id="expirationWarning" style="color:red"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <button id="saveQuizInfo" data-toggle="modal" data-target="#confirm-submit" class="btn btn-info pull-right"
+                                ng-disabled="!quizData.title || !quizData.groups || !quizData.startDate || !quizData.preferredDate || !quizData.expirationDate || !inactive">
+                            Save Quiz Info
+                        </button>
+                        <div style="clear:both"></div>
+                        <hr />
+                        <button id="addQuestionBtn" type="button" class="btn btn-info" data-toggle="modal" data-target="#questionModal" ng-click="addNewChoice();" ng-disabled="inactive">Add Quiz Question</button>
+                        <button id="backToQuizPage" type="button" class="btn btn-info" ng-disabled="inactive" onclick="location.href='@Url.Action("AllTraining", "Training")'">Return to Quiz Page</button>
+                    </fieldset>
+                </form>
+
+                @*Modal for Save Quiz confimation*@
+                <div class="modal fade" id="confirm-submit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                Confirm Submit
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to save this quiz?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                <button id="submit" type="submit" class="btn btn-success success" ng-click="updateQuiz();">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div ng-controller="updateQuestionController">
+
+                <!--Modal for adding quiz question-->
+                <div class="modal fade" id="questionModal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title">Add Quiz Question</h4>
+                            </div>
+                            <div class="modal-body">
+
+
+                                <form id="questionForm" name="questionForm" ng-submit="addQuestion" ng-init="questionData.id = 0">
+                                    <input type="text" style="display:none" ng-model="questionData.id" />
+                                    <div class="form-group">
+                                        <div ng-show="!status.isEditing">
+                                            <label>Question Type</label>
+                                            <br />
+                                            <label for="multipleChoice">Multiple Choice</label>
+                                            <input id="multipleChoice" ng-model="questionData.questionType" type="radio" name="questionType" value="multipleChoice">
+                                            <br />
+                                            <label for="trueFalse">True/False</label>
+                                            <input id="trueFalse" ng-model="questionData.questionType" type="radio" name="questionType" value="trueFalse">
+                                            <br />
+                                            <label for="shortAnswer">Short Answer</label>
+                                            <input id="shortAnswer" ng-model="questionData.questionType" type="radio" name="questionType" value="shortAnswer">
+                                        </div>
+                                        <br /> <br />
+                                        <div class="form-group">
+                                            <label for="questionText">Question</label>
+                                            <input name="myInput" ng-model="questionData.questionText" type="text" class="form-control" id="questionText" ng-required=true placeholder="Enter Quiz Question">
+                                        </div>
+
+                                        <div class="form-group" ng-init="isCorrect='answer1'">
+
+                                            <div ng-show="questionData.questionType == 'multipleChoice'">
+
+                                                <div class="row">
+                                                    <div class="col-sm-4">
+                                                        <label for="choices">Multiple Choice Options:</label>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <label for="correct">Correct Answer</label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label for="labelA" class="col-sm-2 col-form-label">Choice A:</label>
+                                                    <div class="col-sm-6">
+                                                        <input ng-model="mcAnswers[0].answerText" name="myInput" type="text" class="form-control" id="choice1" ng-required="questionData.questionType=='multipleChoice'" placeholder="Enter Choice A">
+                                                    </div>
+                                                    <div class="col-sm-1">
+                                                        <input ng-model="isCorrect" type="radio" name="correctAnswer" value="answer1" checked />
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group row">
+                                                    <label for="labelB" class="col-sm-2 col-form-label">Choice B:</label>
+                                                    <div class="col-sm-6">
+                                                        <input ng-model="mcAnswers[1].answerText" name="myInput" type="text" class="form-control" id="choice2" ng-required="questionData.questionType=='multipleChoice'" placeholder="Enter Choice B">
+                                                    </div>
+                                                    <div class="col-sm-1">
+                                                        <input ng-model="isCorrect" type="radio" name="correctAnswer" value="answer2" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label for="labelC" class="col-sm-2 col-form-label">Choice C:</label>
+                                                    <div class="col-sm-6">
+                                                        <input ng-model="mcAnswers[2].answerText" name="myInput" type="text" class="form-control" id="choice3" ng-required="questionData.questionType=='multipleChoice'" placeholder="Enter Choice C">
+                                                    </div>
+                                                    <div class="col-sm-1">
+                                                        <input ng-model="isCorrect" type="radio" name="correctAnswer" id="is3" value="answer3" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label for="labelD" class="col-sm-2 col-form-label">Choice D:</label>
+                                                    <div class="col-sm-6">
+                                                        <input ng-model="mcAnswers[3].answerText" name="myInput" type="text" class="form-control" id="choice4" ng-required="questionData.questionType=='multipleChoice'" placeholder="Enter Choice D">
+                                                    </div>
+                                                    <div class="col-sm-1">
+                                                        <input ng-model="isCorrect" type="radio" name="correctAnswer" id="is4" value="answer4" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div ng-show="questionData.questionType == 'trueFalse'">
+                                                <div class="form-group">
+                                                    <label for="tfCorrect">Correct Answer</label>
+                                                    <div class="row">
+                                                        <div class="form-group">
+                                                            <div class="col-sm-2">
+                                                                <label ng-model="tfAnswers[0].answerText" for="trueAnswer" value="true">True</label>
+                                                                <input ng-model="isCorrect" id="trueAnswer" type="radio" value="answer1" name="trueFalse" Checked />
+                                                            </div>
+                                                            <div class="col-sm-2">
+                                                                <label ng-model="tfAnswers[1].answerText" for="falseAnswer" value="false">False</label>
+                                                                <input ng-model="isCorrect" id="falseAnswer" type="radio" value="answer2" name="trueFalse" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div ng-show="questionData.questionType == 'shortAnswer'">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div ng-if="!status.isEditing">
+                                                    <button id="saveQuestion" type="submit" ng-click="setCorrectAnswer()" class="btn btn-primary pull-left" ng-disabled="!questionForm.$valid">Save</button>
+                                                </div>
+                                                <div ng-if="status.isEditing">
+                                                    <button id="saveQuestion" type="submit" ng-click="setCorrectAnswer()" class="btn btn-primary pull-left" ng-disabled="!questionForm.$valid">Save</button>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <button id="cancel" type="button" class="btn btn-secondary pull-right" data-dismiss="modal" ng-click="cancelQuestion()">Cancel</button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <h4 hidden id="responseMessage"></h4>
+                <table id="questionTable"></table>
+            </div>
+            <br />
+            <br />
+            <br />
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirmQuestionRemove" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                Confirm Remove
+            </div>
+            <div class="modal-body">
+                Are you sure you want to remove this quiz?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button id="removeQuestionBtn" class="btn btn-success success">Remove</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="~/Scripts/datepicker.js"></script>
+<script type="text/javascript" src="~/Scripts/updateTraining.js"></script>

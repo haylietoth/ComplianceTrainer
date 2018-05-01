@@ -1,0 +1,112 @@
+﻿@model ComplianceTrainer.Models.UserQuizViewModel
+@Html.HiddenFor(m => m.isHR, new { id = "hrCheck" })
+@Html.HiddenFor(m => m.isManager, new { id = "managerCheck" })
+@Html.HiddenFor(m => m.QuizId, new { id = "quizId"})
+<div ng-app="QuizApp" ng-controller="QuizCtrl">
+    <div ng-show="status.isSubmitted">
+        <div class="row">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-8">
+                <h3 class="text-center">{{status.text}}</h3>
+                <ul class="list-group">
+                    <li class="list-group-item"><strong>Quiz: </strong> @Html.DisplayFor(m => m.title)</li>
+                    <li class="list-group-item"><strong>Description: </strong> @Html.DisplayFor(m => m.description)</li>
+                    <li class="list-group-item"><strong>Referenced Media: </strong> <a href="@Html.DisplayFor(m => m.media)">@Html.DisplayFor(m => m.media)</a></li>
+                </ul>
+                @Html.ActionLink("Back to My Training", "MyTraining", "Training", new { @class = "btn btn-success pull-left" })
+                <button class="btn btn-success pull-right" type="button" onclick="window.location.reload()">View Answers</button>
+            </div>
+            <div class="col-sm-2"></div>
+        </div>
+    </div>
+        
+        <div ng-show="!status.isSubmitted">
+            <div class="row">
+                <div class="col-sm-2"></div>
+                <div class="col-sm-8">
+                    <ul class="list-group">
+                        <li class="list-group-item"><strong>Quiz: </strong> @Html.DisplayFor(m => m.title)</li>
+                        <li class="list-group-item"><strong>Description: </strong> @Html.DisplayFor(m => m.description)</li>
+                        <li class="list-group-item"><strong>Referenced Media: </strong> <a href="@Html.DisplayFor(m => m.media)">@Html.DisplayFor(m => m.media)</a></li>
+                    </ul>
+                    <div ng-if="!status.started">
+                        <input class="btn btn-default pull-right" type="button" ng-click="start()" value="Start Quiz" />
+                        <input class="btn btn-default pull-left" type="button" onclick="location.href='@Url.Action("myTraining", "Training")'" value="Back to My Training" />
+                    </div>
+                </div>
+                <div class="col-sm-2"></div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2"></div>
+                <div class="col-sm-8">
+                    <div id="spinner" style="display:block">
+                        <h3 id="spinnerText"></h3>
+                        <h4>If the page takes longer then 5 seconds to load click <a onClick="window.location.reload()">Here</a></h4>
+                        <img src="~/Content/Images/loader32.gif" alt="loading" />
+                    </div>
+                </div>
+                <div class="col-sm-2"></div>
+            </div>
+            <div id="main-container">
+                <div ng-if="(status.started)">
+                    <div class="row">
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm-8">
+                            <fieldset ng-disabled="status.isTaken">
+                                <div class="panel panel-primary" ng-disabled="status.isTaken">
+                                    <div class="panel-heading">Question {{quiz.currentQuestion + 1}}</div>
+                                    <div class="panel-body">
+                                        <h4>
+                                            {{quiz.question.questionText}}
+                                            <span class="glyphicon glyphicon-ok" ng-if="status.isTaken && status.isChecked && status.isCorrect"></span>
+                                            <span class="glyphicon glyphicon-remove" ng-if="status.isTaken && status.isChecked && !status.isCorrect"></span>
+                                            <span class="" ng-if="status.isTaken && !status.isChecked &&!status.isCorrect"><i>*Awaiting Grade</i></span>
+                                        </h4>
+                                        <div ng-if="!(quiz.question.type=='shortAnswer')">
+                                            <div ng-repeat="answer in quiz.question.answers">
+                                                <input ng-model="quiz.question.selectedAnswer" type="radio" ng-value="{{answer.id}}" name="{{quiz.question.questionText}}">
+                                                <label>{{answer.text}}</label>
+                                            </div>
+                                        </div>
+                                        <div ng-if="quiz.question.type == 'shortAnswer'">
+                                            <textarea rows="5" class="form-control" id="shortAnswerQuestion" ng-model="quiz.question.answerText" placeholder="Answer Here"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <input class="btn btn-default pull-left" type="button" ng-click="previous()" ng-disabled="status.isFirstQuestion" value="Previous" />
+                            <div ng-if="status.isLastQuestion">
+                                <input ng-disabled="(quiz.question.type != 'shortAnswer' && quiz.question.selectedAnswer==0) ||
+                           (quiz.question.type == 'shortAnswer' && quiz.question.answerText=='') || status.isTaken" data-toggle="modal"
+                                       data-target="#confirm-submit" ng-click="setLastQuestion()" class="btn btn-default pull-right"
+                                       type="button" value="Submit" />
+                            </div>
+                            <div ng-if="!status.isLastQuestion">
+                                <input class="btn btn-default pull-right" type="button" ng-click="next()" ng-disabled="!status.started ||
+                           (quiz.question.type != 'shortAnswer' && quiz.question.selectedAnswer==0) ||
+                           (quiz.question.type == 'shortAnswer' && quiz.question.answerText=='')" value="Next" />
+                            </div>
+                        </div>
+                        <div class="col-sm-2"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="confirm-submit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            Confirm Submit
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to submit this quiz?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            <button id="submit" class="btn btn-success success" ng-click="submit()">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script src="~/Scripts/Quiz.js"></script>

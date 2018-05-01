@@ -1,0 +1,14 @@
+﻿.resizeBtn {
+    width: 89.6px;
+}
+
+.hide-file {
+    visibility: hidden;
+    position: absolute;
+}
+
+.form-group.required .control-label:after {
+    content: "*";
+    color: red;
+}
+

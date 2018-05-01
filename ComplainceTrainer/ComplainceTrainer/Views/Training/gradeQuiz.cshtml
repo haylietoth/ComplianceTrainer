@@ -1,0 +1,57 @@
+﻿@model ComplianceTrainer.Models.GradeViewModel
+@Html.HiddenFor(m => m.QuizId, new { id = "quizId" })
+<div ng-app="QuizApp" ng-controller="QuizCtrl">
+    <div ng-show="status.isSubmitted">
+        <div class="row">
+        </div>
+        <div class="row">
+            <div class="col-sm-3 pull-left">
+                @Html.ActionLink("Back to My Training", "MyTraining", "Training", new { @class = "btn btn-success" })
+            </div>
+            <div class="col-sm-3">
+            </div>
+            <div class="col-sm-3">
+            </div>
+            <div class="col-sm-3 pull-right">
+                @Html.ActionLink("View Answers", "ViewQuiz", "Training", new { @class = "btn btn-success" })
+            </div>
+        </div>
+
+    </div>
+    <div ng-show="!status.isSubmitted">
+        <div class="row">
+            <div class="col-sm-12">
+                <h2>Quiz: @Html.DisplayFor(m => m.title)</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <h4>@Html.DisplayFor(m => m.description)</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <h4>Referenced Media: @Html.DisplayFor(m => m.media)</h4>
+            </div>
+        </div>
+        <div ng-repeat="question in quiz.questions">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h4>Question {{question.iterator+1}}</h4>
+                    <p>{{question.questionText}}</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <textarea rows="5" class="form-control" id="shortAnswerQuestion" ng-model="question.answerText" readonly></textarea>
+                    <br />
+                    <input class="btn btn-success" type="button" ng-click="accept(question.iterator)" value="Accept" />
+                    <input class="btn btn-danger" type="button" ng-click="reject(question.iterator)" value="Reject" />
+                </div>
+            </div>
+        </div>
+        <br />
+        <input class="btn btn-success" type="button" ng-click="submit()" value="Submit Grades" />
+    </div>
+</div>
+<script src="~/Scripts/gradeQuiz.js"></script>

@@ -1,0 +1,21 @@
+﻿body {
+}
+
+.cursorChange {
+    cursor: not-allowed;
+}
+
+.greenFont {
+    color: green;
+    font-weight: bold;
+}
+
+.orangeFont {
+    color: orange;
+    font-weight: bold;
+}
+
+.redFont {
+    color: red;
+    font-weight: bold;
+}

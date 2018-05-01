@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="HumanArcModelStoreContainer" CdmEntityContainer="HumanArcEntities">
+    <EntitySetMapping Name="Answers">
+      <EntityTypeMapping TypeName="HumanArcModel.Answer">
+        <MappingFragment StoreEntitySet="Answers">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="questionId" ColumnName="questionId" />
+          <ScalarProperty Name="answerText" ColumnName="answerText" />
+          <ScalarProperty Name="isCorrect" ColumnName="isCorrect" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Groups">
+      <EntityTypeMapping TypeName="HumanArcModel.Group">
+        <MappingFragment StoreEntitySet="Groups">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Questions">
+      <EntityTypeMapping TypeName="HumanArcModel.Question">
+        <MappingFragment StoreEntitySet="Questions">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="quizId" ColumnName="quizId" />
+          <ScalarProperty Name="questionText" ColumnName="questionText" />
+          <ScalarProperty Name="questionType" ColumnName="questionType" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Quizes">
+      <EntityTypeMapping TypeName="HumanArcModel.Quize">
+        <MappingFragment StoreEntitySet="Quizes">
+          <ScalarProperty Name="expiredDate" ColumnName="expiredDate" />
+          <ScalarProperty Name="preferDate" ColumnName="preferDate" />
+          <ScalarProperty Name="startDate" ColumnName="startDate" />
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="groupId" ColumnName="groupId" />
+          <ScalarProperty Name="title" ColumnName="title" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="media" ColumnName="media" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserQuizQuestionAnswers">
+      <EntityTypeMapping TypeName="HumanArcModel.UserQuizQuestionAnswer">
+        <MappingFragment StoreEntitySet="UserQuizQuestionAnswers">
+          <ScalarProperty Name="text" ColumnName="text" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="quizId" ColumnName="quizId" />
+          <ScalarProperty Name="questionId" ColumnName="questionId" />
+          <ScalarProperty Name="answerId" ColumnName="answerId" />
+          <ScalarProperty Name="isChecked" ColumnName="isChecked" />
+          <ScalarProperty Name="isApproved" ColumnName="isApproved" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="HumanArcModel.User">
+        <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="firstName" ColumnName="firstName" />
+          <ScalarProperty Name="lastName" ColumnName="lastName" />
+          <ScalarProperty Name="email" ColumnName="email" />
+          <ScalarProperty Name="userGroups" ColumnName="userGroups" />
+          <ScalarProperty Name="SAMAccountName" ColumnName="SAMAccountName" />
+          <ScalarProperty Name="manager" ColumnName="manager" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

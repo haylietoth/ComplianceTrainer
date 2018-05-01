@@ -1,0 +1,48 @@
+INSERT INTO Groups (name)
+VALUES ('HRGroup');
+INSERT INTO Groups (name)
+VALUES ('managers');
+INSERT INTO Groups (name)
+
+
+
+INSERT INTO Quizes (groupId, title, description)
+VALUES (1, 'Test Quiz 1', 'This quiz is for testing');
+
+
+
+INSERT INTO Questions (quizId, questionText, questionType)
+VALUES (1, 'What is 2+2?', 'm');
+INSERT INTO Questions (quizId, questionText, questionType)
+VALUES (1, '2+2 equals 4', 't');
+INSERT INTO Questions (quizId, questionText, questionType)
+VALUES (1, 'Why does 2 + 2 equal 4', 's');
+
+
+
+INSERT INTO Answers (questionId, answerText, isCorrect)
+VALUES (6, '2', 1);
+INSERT INTO Answers (questionId, answerText, isCorrect)
+VALUES (6, '4', 0);
+INSERT INTO Answers (questionId, answerText, isCorrect)
+VALUES (6, '0', 1);
+INSERT INTO Answers (questionId, answerText, isCorrect)
+VALUES (6, '8', 1);
+
+INSERT INTO Answers (questionId, answerText, isCorrect)
+VALUES (7, 'True', 0);
+INSERT INTO Answers (questionId, answerText, isCorrect)
+VALUES (7, 'False', 1);
+
+INSERT INTO Answers (questionId, answerText, isCorrect)
+VALUES (8, '2 + 2 quals 4 because math', 0);
+
+
+
+ALTER TABLE Quizes
+ADD startDate date;
+ALTER TABLE Quizes
+ADD preferDate date;
+ALTER TABLE Quizes
+ADD expiredDate date;
+

@@ -1,0 +1,62 @@
+﻿@*This html file is the project's home page. It displays the screen which a user 
+  will first be directed to. It provides a header section and some dynamic buttons 
+  with images to go to different parts of the web application. These buttons are 
+  only visual depending on the users access (employee, manager, or hr).*@
+@model ComplianceTrainer.Models.UserViewModel
+@Html.HiddenFor(m => m.isHR, new { id = "hrCheck" })
+@Html.HiddenFor(m => m.isManager, new { id = "managerCheck" })
+@Html.HiddenFor(m => m.userGroups, new { id = "memberOf" })
+<link rel="stylesheet" type="text/css" href="~/Content/index.css" />
+
+
+<header class="jumbotron">
+    <h2>Hey, @Html.DisplayTextFor(m => m.firstName)!</h2>
+    <p class="text-muted">Welcome to the Compliance Trainer website. This site provides you with the required compliance training.</p>
+    <button type="button" class="btn btn-warning" onclick="location.href='@Url.Action("myTraining", "Training")'">Quizzes To Complete: <span id="quizNum" class="badge"></span></button>
+</header>
+
+@*Body. This includes all the buttons that will navigate a user to a page. 
+  The same functionality works in regards to the layout navigation on all pages.*@
+
+<div class="gallery-container">
+    <div class="tz-gallery">
+        <div class="row">
+            <div class="col-sm-4" data-toggle="tooltip" title="Go here to take quizzes or check on any trainings assigned to you.">
+                <div class="thumbnail">
+                    <a class="lightbox" href="@Url.Action("MyTraining","Training")">
+                        <img src="~/Content/Images/employeeTyping.jpg" alt="Training">
+                    </a>
+                    <div class="caption">
+                        <h2>View Training</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4" data-toggle="tooltip" title="Go here to check on your employees' training statuses. As an HR, you can grade ungraded user quizzes here.">
+                <div class="thumbnail">
+                    <a class="lightbox" href="@Url.Action("ManageEmployees","Training")">
+                        <img src="~/Content/Images/employees.jpg" alt="Training">
+                    </a>
+                    <div class="caption">
+                        <h2>Manage Employees</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4" data-toggle="tooltip" title="Go here to Edit or Remove existing trainings or add new trainings.">
+                <div class="thumbnail">
+                    <a class="lightbox" href="@Url.Action("AllTraining","Training")">
+                        <img src="~/Content/Images/manageBoard.jpg" alt="Training">
+                    </a>
+                    <div class="caption">
+                        <h2>Manage Training</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript" src="~/Scripts/index.js"></script>
+
+
+

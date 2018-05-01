@@ -1,0 +1,36 @@
+﻿@model ComplianceTrainer.Models.UserViewModel
+@Html.HiddenFor(m => m.isHR, new { id = "hrCheck" })
+@Html.HiddenFor(m => m.isManager, new { id = "managerCheck" })
+@Html.HiddenFor(m => m.userGroups, new { id = "memberOf" })
+<link rel="stylesheet" type="text/css" href="~/Content/myTraining.css" />
+<h2>@Html.DisplayFor(m => m.firstName) @Html.DisplayFor(m => m.lastName) </h2>
+<div class="row">
+    <div class="col-sm-10 col-sm-offset-1">
+        <div id="spinner" style="display:block" ;>
+            <h3 id="spinnerText"></h3>
+            <h4>If the page takes longer then 5 seconds to load click <a onClick="window.location.reload()">Here</a></h4>
+            <img src="~/Content/Images/loader32.gif" alt="loading" />
+        </div>
+    </div>
+</div>
+<div id="main-container">
+    <div class="row">
+        <div class="col-sm-10 col-sm-offset-1">
+            <h3>To Do:</h3>
+            <table id="notCompleted" class="display" cellspacing="0" style="width:100%;"></table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-10 col-sm-offset-1">
+            <h3>Awaiting Grade:</h3>
+            <table id="needsGraded" class="display" cellspacing="0" style="width:100%;"></table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-10 col-sm-offset-1">
+            <h3>Completed:</h3>
+            <table id="completed" class="display" cellspacing="0" style="width:100%;"></table>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="~/Scripts/myTraining.js"></script>
